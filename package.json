@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "start": "serve . -p 5000 -s"
+    "start": "serve . -p 5000"
   },
   "dependencies": {
     "@vercel/edge": "^0.1.2"
