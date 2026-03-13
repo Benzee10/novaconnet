@@ -1,6 +1,12 @@
 {
   "private": true,
+  "scripts": {
+    "start": "serve . -p 5000 -s"
+  },
   "dependencies": {
     "@vercel/edge": "^0.1.2"
+  },
+  "devDependencies": {
+    "serve": "^14.2.6"
   }
 }
