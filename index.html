@@ -1,62 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MeetHer &mdash; Browse Profiles</title>
+  <title>Browse Profiles</title>
   <meta name="description" content="Browse verified adult profiles. Connect directly via WhatsApp." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- Header -->
   <header class="site-header">
     <div class="header-inner">
-      <a href="index.html" class="logo">
-        <span class="logo-icon">💕</span>
-        <span class="logo-text">MeetHer</span>
-      </a>
-      <div class="header-actions">
-        <span class="badge-verified">✔ Verified Profiles</span>
-        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle theme">🌙</button>
-      </div>
+      <span class="header-title">Profiles</span>
     </div>
   </header>
 
-  <!-- Main -->
   <main class="page">
 
-    <!-- Page Title -->
     <div class="page-title">
       <h1>Browse Profiles <span class="count-badge" id="countBadge"></span></h1>
       <p>Real women looking to connect. View a profile and reach out directly.</p>
     </div>
 
-    <!-- 18+ Disclaimer -->
     <div class="disclaimer">
       <span class="disclaimer-icon">🔞</span>
-      <span><strong>Adults Only &mdash; 18+.</strong> By browsing this directory you confirm you are at least 18 years old. All profiles belong to consenting adults.</span>
+      <span><strong>Adults Only — 18+.</strong> By browsing this directory you confirm you are at least 18 years old.</span>
     </div>
 
-    <!-- Profile Grid -->
     <div class="profile-grid" id="profileGrid"></div>
 
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
-    &copy; <span id="year"></span> MeetHer &mdash; For adults 18+ only. All profiles are verified.
+    &copy; <span id="year"></span> &mdash; For adults 18+ only.
   </footer>
 
   <script src="profiles.js"></script>
   <script>
-    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Count badge
     document.getElementById('countBadge').textContent = profiles.length + ' online';
 
-    // Render cards
     const grid = document.getElementById('profileGrid');
     profiles.forEach(p => {
       const card = document.createElement('a');
@@ -70,7 +53,6 @@
             <div class="name">${p.name}, ${p.age}</div>
             <div class="meta">📍 ${p.location}</div>
           </div>
-          <span class="card-verified-badge">✔ Verified</span>
         </div>
         <div class="card-body">
           <p class="card-bio">${p.bio}</p>
@@ -78,20 +60,6 @@
         </div>
       `;
       grid.appendChild(card);
-    });
-
-    // Theme toggle
-    const toggle = document.getElementById('themeToggle');
-    const html = document.documentElement;
-    const saved = localStorage.getItem('theme') || 'light';
-    html.setAttribute('data-theme', saved);
-    toggle.textContent = saved === 'dark' ? '☀️' : '🌙';
-
-    toggle.addEventListener('click', () => {
-      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-      toggle.textContent = next === 'dark' ? '☀️' : '🌙';
     });
   </script>
 </body>
