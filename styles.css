@@ -313,7 +313,7 @@ body {
   gap: 6px;
   color: var(--text-muted);
   font-size: 0.88rem;
-  margin-top: -16px;
+  margin-top: 6px;
 }
 
 .info-section h3 {
