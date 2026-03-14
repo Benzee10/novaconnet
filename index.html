@@ -6,6 +6,7 @@
   <title>Browse Profiles</title>
   <meta name="description" content="Browse verified adult profiles. Connect directly via WhatsApp." />
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 
@@ -53,6 +54,16 @@
 
   <script src="profiles.js"></script>
   <script>
+    // Telegram WebApp
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    const user = tg.initDataUnsafe?.user;
+    if (user) {
+      console.log('TG user:', user.first_name, user.username);
+    }
+
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Populate location filter with unique locations
