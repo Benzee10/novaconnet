@@ -9,17 +9,34 @@
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="header-inner">
-      <span class="header-title">Profiles</span>
-    </div>
-  </header>
-
   <main class="page">
 
     <div class="page-title">
       <h1>Browse Profiles <span class="count-badge" id="countBadge"></span></h1>
       <p>Real women looking to connect. View a profile and reach out directly.</p>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="search-bar-wrap">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search by name or keyword…"
+          autocomplete="off"
+        />
+        <button class="search-clear" id="searchClear" title="Clear">✕</button>
+      </div>
+      <select id="locationFilter" class="location-filter">
+        <option value="">📍 All Locations</option>
+      </select>
+    </div>
+
+    <!-- No results -->
+    <div class="no-results" id="noResults" style="display:none;">
+      <p>No profiles match your search.</p>
     </div>
 
     <div class="profile-grid" id="profileGrid"></div>
@@ -37,13 +54,25 @@
   <script src="profiles.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-    document.getElementById('countBadge').textContent = profiles.length + ' online';
 
-    const grid = document.getElementById('profileGrid');
-    profiles.forEach(p => {
+    // Populate location filter with unique locations
+    const locations = [...new Set(profiles.map(p => p.location))].sort();
+    const select = document.getElementById('locationFilter');
+    locations.forEach(loc => {
+      const opt = document.createElement('option');
+      opt.value = loc;
+      opt.textContent = loc;
+      select.appendChild(opt);
+    });
+
+    // Render a card element
+    function createCard(p) {
       const card = document.createElement('a');
       card.className = 'profile-card';
       card.href = `profile?id=${p.id}`;
+      card.dataset.name = p.name.toLowerCase();
+      card.dataset.bio = p.bio.toLowerCase();
+      card.dataset.location = p.location.toLowerCase();
       card.innerHTML = `
         <div class="card-photo-wrap">
           <img src="${p.photo}" alt="${p.name}" loading="lazy" />
@@ -58,8 +87,52 @@
           <button class="card-btn">View Profile</button>
         </div>
       `;
-      grid.appendChild(card);
+      return card;
+    }
+
+    const grid = document.getElementById('profileGrid');
+    const noResults = document.getElementById('noResults');
+    const countBadge = document.getElementById('countBadge');
+
+    // Render all cards
+    profiles.forEach(p => grid.appendChild(createCard(p)));
+    countBadge.textContent = profiles.length + ' online';
+
+    // Filter logic
+    function applyFilters() {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      const loc = select.value.toLowerCase();
+      let visible = 0;
+
+      grid.querySelectorAll('.profile-card').forEach(card => {
+        const matchSearch = !query ||
+          card.dataset.name.includes(query) ||
+          card.dataset.bio.includes(query);
+        const matchLoc = !loc || card.dataset.location === loc;
+        const show = matchSearch && matchLoc;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      noResults.style.display = visible === 0 ? 'block' : 'none';
+      countBadge.textContent = visible + ' online';
+
+      // Show/hide clear button
+      document.getElementById('searchClear').style.display =
+        document.getElementById('searchInput').value ? 'flex' : 'none';
+    }
+
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    select.addEventListener('change', applyFilters);
+
+    document.getElementById('searchClear').addEventListener('click', () => {
+      document.getElementById('searchInput').value = '';
+      applyFilters();
+      document.getElementById('searchInput').focus();
     });
+
+    // Init clear button hidden
+    document.getElementById('searchClear').style.display = 'none';
   </script>
 </body>
 </html>
